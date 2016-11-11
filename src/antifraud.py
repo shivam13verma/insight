@@ -6,11 +6,22 @@ args = []
 for arg in sys.argv:
     args.append(arg)
 
-batch_path = str(args[0])
-stream_path = str(args[1])
-out1_path = str(args[2])
-out2_path = str(args[3])
-out3_path = str(args[4])
+batch_path = str(args[1])
+stream_path = str(args[2])
+out1_path = str(args[3])
+out2_path = str(args[4])
+out3_path = str(args[5])
+
+print args
+
+with open(batch_path,'r') as f:
+    for x in f:
+        print x
+with open(stream_path,'r') as f:
+    for x in f:
+        print x
+
+
 #out4_path = str(args[5])
 
 #batch_path = './paymo_input/batch_payment.txt'
@@ -115,8 +126,8 @@ def is_kth_friend(batch_dict, x, y, k=4):
     is_friend = False
 
     while count<k:
-        node, curr_friends = friend_list[0]
         try:
+            node, curr_friends = friend_list[0]
             for friend in curr_friends:
                 if friend not in visited:
                     visited.add(friend)
