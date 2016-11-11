@@ -215,7 +215,7 @@ def main():
     out2_path = str(args[4])
     out3_path = str(args[5])
     #out4_path = str(args[6]) #uncomment this when running feature4.
-    #out5_path = str(args[7]) #uncomment this when running feature4.
+    #out5_path = str(args[7]) #uncomment this when running feature5.
 
     #batch_path = './paymo_input/batch_payment.txt'
     #stream_path = './paymo_input/stream_payment.txt'
