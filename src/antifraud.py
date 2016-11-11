@@ -54,7 +54,7 @@ for s in batch_tup:
 
 ##Feature 1: Prints verification status if id1 -> id2 not in transaction history
 with open(out1_path,'wb') as f:
-    for x in stream_list[:100]:
+    for x in stream_list:
         tup = tuple(map(int,x)) #tuple of ids as ints
         try:
             if tup[1] in batch_dict[tup[0]]: #if (id1,id2) have transacted
@@ -70,7 +70,7 @@ with open(out1_path,'wb') as f:
 
 ##Feature 2: Prints verification status if (id1,id2) have transacted or have a common friend
 with open(out2_path,'wb') as f:
-    for x in stream_list[:100]:
+    for x in stream_list:
         tup = tuple(map(int,x))
         try:
             if tup[1] in batch_dict[tup[0]]:
@@ -134,7 +134,7 @@ def is_kth_friend(batch_dict, x, y, k=4):
 ##Feature 3: Prints verification status if (id1,id2) have transacted or are within network of range 4
 with open(out3_path,'wb') as f:
     
-    for x in stream_list[:100]:
+    for x in stream_list:
         tup = tuple(map(int,x))
         try:
             if tup[1] in batch_dict[tup[0]]:
@@ -154,7 +154,7 @@ with open(out3_path,'wb') as f:
 #K = 10 #set as 10, say.
 #with open(out4_path,'wb') as f:
 #    
-#    for x in stream_list[:100]:
+#    for x in stream_list:
 #        tup = tuple(map(int,x))
 #        try:
 #            if tup[1] in batch_dict[tup[0]]:
