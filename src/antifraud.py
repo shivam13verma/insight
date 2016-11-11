@@ -181,7 +181,7 @@ def main():
         batch_dict[s[1]].add(s[0]) #add id1 to id2's set.
     
     run_feature1(out1_path, stream_list, batch_dict)
-    #run_feature2(out2_path, stream_list, batch_dict)
+    run_feature2(out2_path, stream_list, batch_dict)
     run_feature3(out3_path, stream_list, batch_dict)
     #run_feature4(out4_path, stream_list, batch_dict, k=10) #uncomment this when running feature4.
 
