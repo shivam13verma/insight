@@ -9,7 +9,8 @@ Run as follows:
 - Run code using `bash run.sh` from repo directory.
 
 
-The antifraud.py source code contains 5 kinds of features:
+The antifraud.py source code contains 6 kinds of features:
 - Features 1 to 3: As described in original problem.
 - Feature 4: Generalization of feature 3 to both users being within K degrees of each other within transaction graph.
 - Feature 5: Extension of feature 3, also considering whether last transaction was "a long time ago" (in which case it is unverified).
+- Feature 6: Extension of feature 3, also checking if transaction amount exceeds a certain limit, such as previous maximum transaction  (which will vary depending on user) multiplied by a factor.
