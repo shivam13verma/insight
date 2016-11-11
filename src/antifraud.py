@@ -106,7 +106,7 @@ def run_feature3(out3_path, stream_list, batch_dict):
                         f.write("unverified\n")
 
             except KeyError:
-                batch_dict[tup[0]].append(tup[1])
+                batch_dict[tup[0]].add(tup[1])
                 pass
 
 def run_feature4(out4_path, stream_list, batch_dict, k=10):
@@ -125,7 +125,7 @@ def run_feature4(out4_path, stream_list, batch_dict, k=10):
                     else: #if id1 has not been seen before
                         f.write("unverified\n") 
             except KeyError:
-                batch_dict[tup[0]].append(tup[1])
+                batch_dict[tup[0]].add(tup[1])
                 pass
 
 
@@ -202,6 +202,70 @@ def run_feature5(out5_path, stream, batch, last_transaction = 365):
             except KeyError:
                 batch_dict[tup[0]].add(tup[1])
                 pass
+            
+def run_feature6(out5_path, stream, batch, mult_factor = 1.0):
+    """
+    Feature 6: Prints verification status as trusted only if last transaction between (id1,id2) are 
+    within each other's 4th degree network (feature 3) and transaction amount is 
+    below (mult_factor * previous maximum of id1).
+    """
+    batch_list = map(lambda x: x.rstrip("\n").split(",")[1:4], batch) #contains list of form [['amt1','id1','id2'],['amt2','id3','id4'],...]
+    stream_list = map(lambda x: x.rstrip("\n").split(",")[1:4], stream) #contains list of form [['amt1','id1','id2'],['amt2','id3','id4'],...]
+    
+    #delete names of columns
+    del batch_list[0]
+    del stream_list[0]
+
+    def list2Int(x):
+        try:
+            tup = tuple([float(x[2])] + map(lambda x: int(x), x[:2]))
+        except ValueError:
+            tup = tuple([0.] + map(lambda x: int(x), x[:2]))
+        return tup
+
+    batch_tup = map(lambda x: list2Int(x), batch_list) #convert ids from str to int.
+    
+    maxamount_dict = {}
+    batch_dict = defaultdict(set) #dictionary of form {id : [set of neighboring_ids i.e. transacted ids] }.
+
+    for s in batch_tup:
+        batch_dict[s[1]].add(s[2]) #add id2 to id1's set.
+        batch_dict[s[2]].add(s[1]) #add id1 to id2's set.
+        try:
+            if s[0] > maxamount_dict[s[1]]: #if new_time > last_time
+                maxamount_dict[s[1]] = s[0]
+        except KeyError:
+            maxamount_dict[s[1]] = s[0]
+    
+    with open(out6_path,'wb') as f:
+
+        for x in stream_list:
+            try:
+                tup = tuple([float(x[2])] + map(lambda x: int(x), x[:2]))
+            except ValueError:
+                tup = tuple([0.] + map(lambda x: int(x), x[:2]))
+
+            try:
+                if tup[2] in batch_dict[tup[1]]: #if (id1,id2) have transacted
+                    if tup[0] <= mult_factor*maxamount_dict[tup[1]]: #if last_transaction is within limit.
+                        f.write("trusted\n")
+                    else:
+                        maxamount_dict[tup[1]] = tup[0]
+                        f.write("unverified\n")
+                else:
+                    #if id_y is within span of id_x, and last_transaction is within limit.
+                    if is_kth_friend(batch_dict,tup[1],tup[2],4):
+                        if tup[0] <= mult_factor*maxamount_dict[tup[1]]: #if last_transaction is within limit.
+                            f.write("trusted\n")
+                        else:
+                            maxamount_dict[tup[1]] = tup[0]
+                            f.write("unverified\n")
+                    else: #if id1 has not been seen before
+                        f.write("unverified\n")
+
+            except KeyError:
+                batch_dict[tup[0]].add(tup[1])
+                pass
 
 def main():
 
@@ -216,6 +280,7 @@ def main():
     out3_path = str(args[5])
     #out4_path = str(args[6]) #uncomment this when running feature4.
     #out5_path = str(args[7]) #uncomment this when running feature5.
+    #out6_path = str(args[8]) #uncomment this when running feature6.
 
     #batch_path = './paymo_input/batch_payment.txt'
     #stream_path = './paymo_input/stream_payment.txt'
@@ -224,6 +289,7 @@ def main():
     #out3_path = './paymo_output/output3.txt'
     #out4_path = './paymo_output/output4.txt'
     #out5_path = './paymo_output/output5.txt'
+    #out5_path = './paymo_output/output6.txt'
 
     stream = []
     batch = []
@@ -262,6 +328,7 @@ def main():
     run_feature3(out3_path, stream_list, batch_dict)
     #run_feature4(out4_path, stream_list, batch_dict, k=10) #uncomment this when running feature4.
     #run_feature5(out5_path, stream, batch, last_transaction = 365) #uncomment this when running feature5.
+    #run_feature5(out6_path, stream, batch, mult_factor = 1.5) #uncomment this when running feature6.
 
 if __name__ == '__main__':
     main()
