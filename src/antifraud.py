@@ -11,17 +11,6 @@ stream_path = str(args[2])
 out1_path = str(args[3])
 out2_path = str(args[4])
 out3_path = str(args[5])
-
-print args
-
-with open(batch_path,'r') as f:
-    for x in f:
-        print x
-with open(stream_path,'r') as f:
-    for x in f:
-        print x
-
-
 #out4_path = str(args[5])
 
 #batch_path = './paymo_input/batch_payment.txt'
