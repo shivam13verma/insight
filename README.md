@@ -1,5 +1,7 @@
 # insight
 
+This is the solution to the problem set: https://github.com/InsightDataScience/digital-wallet.
+
 Run as follows:
 - Clone repo locally
 - For unit tests, `cd insight_testsuite` `bash run_tests.sh`. Should see 3 tests passed.
